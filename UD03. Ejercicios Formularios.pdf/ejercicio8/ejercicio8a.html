@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Validación de texto</title>
+  <script>
+    function validarTexto() {
+      var texto = document.getElementById('texto').value;
+      var seleccion = document.querySelector('input[name="filtro"]:checked').value;
+
+      // Enviar el texto y la selección al archivo PHP para procesar la validación
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            document.getElementById('resultado').innerHTML = xhr.responseText;
+          } else {
+            document.getElementById('resultado').innerHTML = 'Error al procesar la solicitud.';
+          }
+        }
+      };
+      xhr.open('POST', 'ejercicio8b.php', true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.send('texto=' + encodeURIComponent(texto) + '&seleccion=' + seleccion);
+    }
+  </script>
+</head>
+<body>
+  <h1>Validación de texto</h1>
+  <form>
+    <label for="texto">Introduce el texto:</label><br>
+    <input type="text" id="texto" name="texto"><br><br>
+
+    <label>Selecciona el filtro:</label><br>
+    <input type="radio" id="filtroEmail" name="filtro" value="email">
+    <label for="filtroEmail">Email</label><br>
+    <input type="radio" id="filtroNumeros" name="filtro" value="numeros">
+    <label for="filtroNumeros">Sólo números</label><br>
+    <input type="radio" id="filtroNIF" name="filtro" value="nif">
+    <label for="filtroNIF">NIF</label><br>
+    <input type="radio" id="filtroTexto" name="filtro" value="texto">
+    <label for="filtroTexto">Sólo texto</label><br><br>
+
+    <input type="button" value="Validar" onclick="validarTexto()">
+  </form>
+
+  <div id="resultado"></div>
+</body>
+</html>
